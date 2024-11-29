@@ -1,0 +1,21 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: dsp-clone-job-nov29-newargocd-gitops
+spec:  
+  template:         
+    metadata:
+      name: dsp-clone-job-nov29-newargocd-gitops
+    spec:  
+      serviceAccountName: nov29-newargocd-dsp-job
+      containers:
+      - name: initialize-dsp
+        image: quay.io/redhat-ai-dev/utils:latest
+        command:
+        - /bin/bash
+        - -c
+        - |
+          NS=$(cat /var/run/secrets/kubernetes.io/serviceaccount/namespace)
+          oc wait -l statefulset=nov29-newargocd-notebook --for=condition=ready pod --timeout=300s
+          oc exec  StatefulSet/nov29-newargocd-notebook -- git clone https://github.com/jdubrick-ai/nov29-newargocd
+      restartPolicy: Never

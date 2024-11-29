@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: nov29-newargocd-database-config
+data:
+  VECTORDB_HOST: "nov29-newargocd-database"
+  VECTORDB_PORT: ""
